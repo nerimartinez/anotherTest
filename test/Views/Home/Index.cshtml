@@ -1,0 +1,93 @@
+﻿<div class="global-wrapper" ng-app="myApp">
+    <div class="container">
+        <div class="row panel panel-primary" ng-controller="homeCtrl">
+            <div class="panel-heading">
+                <h2 class="panel-title">Avnon Test</h2>
+            </div>
+            <!--     contact list      -->
+            <div class="col-xs-5 panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <h4>Contacts:</h4>
+                        <input class="form-control" placeholder="Seach Your Contacts" type="text" ng-model="searchText" auto-complete id="auto">
+                        <contact class="list-group-item clearfix" ng-repeat="contact in contacts | sarasa:searchText  "></contact>
+                    </li>
+                </ul>
+            </div>
+            <!--   ng-view below       -->
+            <div class="col-xs-7">
+                <div class="list-group panel-body">
+                    <div ng-view></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  html templates used by angular, usually in separate files -->
+    <script type="text/ng-template" id="default.html">
+        <div class="alert alert-success text-center" ng-class="{hidden : !removed}"> {{removed}}</div>
+        <div class="list-group-item text-center">Please select a contact to view</div>
+    </script>
+    <!--  template for displaying a contacts info  -->
+    <script type="text/ng-template" id="contact_info.html">
+        <div class="list-group-item">
+            <h3 class="text-center">{{currentContact.FirstName + ' ' + currentContact.LastName}} </h3>
+            <p>Position: {{currentContact.Position}}</p>
+            <p>Phone: {{currentContact.Phone}}</p>
+            <p>Email: <a ng-href="{{currentContact.Email}}">{{currentContact.Email}}</a></p>
+            <p>Skype: {{currentContact.Skype}}</p>
+        </div>
+    </script>
+    <!--tags-->
+    <script type="text/ng-template" id="tags.html">
+        <div ng-controller="tagsCtrl">
+            <div class="list-group-item">
+                <span class="pull-right"><a href="" ng-click="edit()" data-keepOpenOnClick>{{editText}}</a></span>
+                <ul>
+                    <li ng-repeat="tag in tags">
+                        <a href="" ng-click="del(tag)" class="glyphicon glyphicon-remove" ng-hide="editMode"></a>
+                        <input ng-hide="editMode" type="checkbox" ng-checked="isChecked(currentContact,tag)" ng-click="change(currentContact,tag)">
+                        <span ng-hide="editMode"> {{tag.Name}}</span>
+                        <input ng-show="editMode" type="text" ng-model="tag.Name" ng-blur='update(tag)' />
+                    </li>
+                </ul>
+                <form ng-hide="editMode" ng-submit="add(currentContact, name)">
+                    <input type="text" ng-model="name" placeholder="Enter tag and press enter" />
+                </form>
+            </div>
+        </div>
+    </script>
+    <!--      template used for the ng-repeat in the contact list        -->
+    <script type="text/ng-template" id="contact.html">
+        <div>
+            <div>
+                <a ng-href="#/contact-info/{{contacts.indexOf(contact)}}" class="rowLeft">
+                    <span>{{contact.FirstName + ' ' + contact.LastName}} </span>
+                </a>
+                <div class="rowRight">
+                    <div class="dropdown " id="dp{{contact.Id}}">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-click="setId(contacts.indexOf(contact))" id="btn{{contact.Id}}">
+                            Tags
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" data-keepOpenOnClick>
+                            <li data-keepOpenOnClick>
+                                <div ng-include="'tags.html'"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <span>{{contact.Position + ' at ' + contact.CompanyName}} </span>
+            </div>
+            <div>
+                <tagsa ng-repeat="tag in contact.TagIds"></tagsa>
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="tagsa.html">
+        <span>
+            [{{mapNames(tag).Name}}]
+        </span>
+    </script>
+</div>

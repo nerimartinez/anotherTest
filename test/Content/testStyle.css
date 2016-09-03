@@ -1,0 +1,17 @@
+﻿.rowParent {
+    overflow: hidden;    
+}
+.rowRight {
+    float: right;
+}
+.rowLeft {
+    overflow: hidden;
+    height: 100px;    
+}
+
+ul{
+      list-style-type: none;
+      }
+      .glyphicon-remove{
+        color:#FF0000;
+      }
